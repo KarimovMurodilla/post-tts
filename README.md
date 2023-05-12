@@ -23,3 +23,9 @@ pip install -r requirements.txt
 ```
 python app.py
 ```
+
+**5. Admin panelni ishga tushurish**
+
+```
+uvicorn admin_panel:app --reload
+```

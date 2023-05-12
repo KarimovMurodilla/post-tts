@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from sqladmin import Admin, ModelView
 
-from utils.db_api.models import User
+from utils.db_api.models import User, Channel, Audio
 
 from loader import db
 
@@ -19,4 +19,22 @@ class UserAdmin(ModelView, model=User):
     icon = "fa-solid fa-user"
    
 
+class ChannelAdmin(ModelView, model=Channel):
+    column_list = [Channel.chat_id, Channel.title]
+    can_create = False
+    can_edit = False
+    can_delete = False
+    icon = "fa-solid fa-user"
+   
+
+class AudioAdmin(ModelView, model=Audio):
+    column_list = [Audio.text, Audio.distination]
+    can_create = False
+    can_edit = False
+    can_delete = False
+    icon = "fa-solid fa-user"
+   
+
 admin.add_view(UserAdmin)
+admin.add_view(ChannelAdmin)
+admin.add_view(AudioAdmin)

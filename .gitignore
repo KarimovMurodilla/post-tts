@@ -132,3 +132,10 @@ dmypy.json
 
 # Databases
 database.db
+
+# GitHub
+.github
+
+
+# Audio
+utils/misc/tts/audio_results/*

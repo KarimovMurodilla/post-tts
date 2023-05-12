@@ -9,7 +9,7 @@ from sqlalchemy.ext.asyncio import create_async_engine
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from utils.db_api.base import Base
-from utils.db_api.models import User
+from utils.db_api.models import User, Channel, Audio
 
 from data.config import DATABASE_URL
 
@@ -64,3 +64,40 @@ class Database:
 
             response = await session.execute(select(User))
             return response.scalars().all()
+
+    # ---Channel model---
+
+    async def reg_channel(self, chat_id, title):
+        """Регистрация channel"""
+        async with self.async_session() as session:
+            session: AsyncSession
+            await session.merge(
+                Channel(
+                    chat_id=chat_id,
+                    title=title
+                )
+            )
+            await session.commit()
+
+
+    async def get_channel(self, chat_id) -> Channel:
+        """Получения пользователя"""
+        async with self.async_session() as session:
+            session: AsyncSession
+
+            response = await session.get(User, chat_id)
+            return response
+
+    # ---Audio model---
+
+    async def reg_audio(self, text, dist):
+        """Регистрация audio"""
+        async with self.async_session() as session:
+            session: AsyncSession
+            await session.merge(
+                Audio(
+                    text=text,
+                    distination=dist
+                )
+            )
+            await session.commit()
