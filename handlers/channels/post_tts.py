@@ -1,11 +1,15 @@
+import re
 from aiogram import types
 
 from loader import dp, tts, db
 
 
 @dp.channel_post_handler()
-async def process_tts(message: types.Message):  
-    result_dir = await tts.text_to_speech(message.text)
+async def process_tts(message: types.Message):
+    pattern = re.compile(r"https?://\S+")
+    text_without_links = pattern.sub("", message.text)
+
+    result_dir = await tts.text_to_speech(text_without_links)
     await message.reply_audio(types.InputFile(result_dir))
 
     chat_id_db = await db.get_channel(message.chat.id)
