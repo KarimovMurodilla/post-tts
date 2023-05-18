@@ -5,7 +5,7 @@ Description=SecretChannel
 [Service]
 Type=simple
 WorkingDirectory=/home/ubuntu/post-tts/
-ExecStart=/usr/bin/python3 app.py
+ExecStart=/home/ubuntu/post-tts/env/bin/python3 /home/ubuntu/post-tts/app.py
 Restart=always
 
 [Install]
