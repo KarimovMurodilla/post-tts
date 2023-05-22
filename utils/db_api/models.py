@@ -24,5 +24,14 @@ class Audio(Base):
     __tablename__ = "audio"
 
     id = Column(Integer, primary_key=True)
+    chat_id = Column(BigInteger)
     text = Column(Text)
     distination = Column(String(150))
+
+
+class Admin(Base):
+    __tablename__ = "admin"
+
+    id = Column(Integer, primary_key=True)
+    username = Column(String(150))
+    password = Column(String(150))

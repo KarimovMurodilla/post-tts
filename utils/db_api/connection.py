@@ -9,7 +9,7 @@ from sqlalchemy.ext.asyncio import create_async_engine
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from utils.db_api.base import Base
-from utils.db_api.models import User, Channel, Audio
+from utils.db_api.models import User, Channel, Audio, Admin
 
 from data.config import DATABASE_URL
 
@@ -25,8 +25,6 @@ class Database:
 
     async def load(self) -> AsyncSession:
         engine= self.get_engine()
-        async with engine.begin() as conn:
-            await conn.run_sync(Base.metadata.create_all)
 
         async_sessionmaker = sessionmaker(
             engine, expire_on_commit=False, class_=AsyncSession
@@ -85,19 +83,35 @@ class Database:
         async with self.async_session() as session:
             session: AsyncSession
 
-            response = await session.get(User, chat_id)
+            response = await session.get(Channel, chat_id)
             return response
 
     # ---Audio model---
 
-    async def reg_audio(self, text, dist):
+    async def reg_audio(self, chat_id, text, dist):
         """Регистрация audio"""
         async with self.async_session() as session:
             session: AsyncSession
             await session.merge(
                 Audio(
+                    chat_id=chat_id,
                     text=text,
                     distination=dist
                 )
             )
             await session.commit()
+
+
+    async def get_audio(self, chat_id) -> Audio:
+        async with self.async_session() as session:
+            session: AsyncSession
+            response = await session.execute(select(Audio).where(Audio.chat_id==chat_id))
+            return response.scalar()
+
+    # ADMINS
+
+    async def get_admin(self, username, password):
+        async with self.async_session() as session:
+            session: AsyncSession
+            response = await session.execute(select(Admin).where(Admin.username==username, Admin.password==password))
+            return response.scalar()
