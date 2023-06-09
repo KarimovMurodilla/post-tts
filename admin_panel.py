@@ -2,11 +2,12 @@ from typing import Optional
 
 from fastapi import FastAPI, Request
 from fastapi.responses import RedirectResponse
-from sqladmin import Admin, ModelView
+from sqladmin import Admin as AdminView, ModelView
 from sqladmin.authentication import AuthenticationBackend
-from utils.db_api.models import User, Channel, Audio
-from loader import db
+from utils.db_api.models import User, Channel, Audio, Admin
 
+from loader import db
+from data.config import BASE_URL
 
 
 class AdminAuth(AuthenticationBackend):
@@ -32,7 +33,7 @@ class AdminAuth(AuthenticationBackend):
 app = FastAPI()
 engine = db.get_engine()
 authentication_backend = AdminAuth(secret_key="123")
-admin = Admin(app=app, engine=engine, authentication_backend=authentication_backend)
+admin = AdminView(app=app, engine=engine, base_url=BASE_URL, authentication_backend=authentication_backend)
 
 
 class UserAdmin(ModelView, model=User):
@@ -75,6 +76,18 @@ class AudioAdmin(ModelView, model=Audio):
         return True
 
 
+class AdminAdmin(ModelView, model=Admin):
+    column_list = [Admin.username, Admin.password]
+    icon = "fa-solid fa-user"
+    
+    def is_visible(self, request: Request) -> bool:
+        return True
+
+    def is_accessible(self, request: Request) -> bool:
+        return True
+
+
 admin.add_view(UserAdmin)
 admin.add_view(ChannelAdmin)
 admin.add_view(AudioAdmin)
+admin.add_view(AdminAdmin)

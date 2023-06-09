@@ -1,5 +1,4 @@
 import aiohttp
-from uuid import uuid4
 from pathlib import Path
 
 from loader import db
@@ -12,8 +11,8 @@ class Muxlisa:
 
     async def generate_file_name(self, message):
         audio = await db.get_audio(message.chat.id)
-        audio_id = 0 if not audio else audio.id
-        file_name = f"{message.chat.title}_{audio_id}"
+        audio_len = len(audio)
+        file_name = f"{message.chat.title}_{audio_len}"
 
         return file_name
     

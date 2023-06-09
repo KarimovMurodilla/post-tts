@@ -106,7 +106,7 @@ class Database:
         async with self.async_session() as session:
             session: AsyncSession
             response = await session.execute(select(Audio).where(Audio.chat_id==chat_id))
-            return response.scalar()
+            return response.scalars().all()
 
     # ADMINS
 

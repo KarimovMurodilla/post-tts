@@ -10,3 +10,6 @@ ADMINS = env.list("ADMINS")  # Тут у нас будет список из а�
 
 # Database
 DATABASE_URL = env.str("DATABASE_URL")
+
+# SqlAdmin
+BASE_URL = env.str("BASE_URL")

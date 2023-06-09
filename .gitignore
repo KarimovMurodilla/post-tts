@@ -135,3 +135,10 @@ database.db
 
 # GitHub
 .github
+
+
+# Alembic
+utils/db_api/migrations/versions
+
+# Mp3
+*.mp3
